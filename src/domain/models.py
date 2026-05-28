@@ -38,6 +38,9 @@ class Room(Base):
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     description: Mapped[str | None] = mapped_column(Text)
     pin_hash: Mapped[str] = mapped_column(String(255), nullable=False)
+    # PoC-only: plaintext PIN kept solely so the pinpad demo screen can show
+    # the code for testing. A production system would never store this.
+    demo_pin: Mapped[str | None] = mapped_column(String(20))
     active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(

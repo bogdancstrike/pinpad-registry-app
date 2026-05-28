@@ -66,7 +66,7 @@ def run() -> None:
         for r in ROOMS:
             room = Room(
                 code=r["code"], name=r["name"], description=r["description"],
-                pin_hash=hash_pin(r["pin"]), active=True,
+                pin_hash=hash_pin(r["pin"]), demo_pin=r["pin"], active=True,
             )
             db.add(room)
             db.flush()

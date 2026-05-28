@@ -5,6 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from src.common.errors import HardwareError, NotFoundError
+from src.common.spans import span
 from src.domain.models import MockDoorDevice, Room
 
 FATAL_STATES = {"SENSOR_ERROR", "FORCED_OPEN"}
@@ -41,27 +42,33 @@ def get_state(db: Session, room_id) -> dict:
 
 
 def unlock(db: Session, room_id) -> dict:
-    door = _get(db, room_id)
-    if not door.controller_online:
-        raise HardwareError("Door controller is offline",
-                            details={"reason": "DOOR_CONTROLLER_OFFLINE"})
-    if door.state == "SENSOR_ERROR":
-        raise HardwareError("Door sensor error", details={"reason": "DOOR_SENSOR_ERROR"})
-    door.locked = False
-    door.state = "UNLOCKED"
-    door.last_unlock_at = datetime.utcnow()
-    db.flush()
-    return serialize(door)
+    with span("door.unlock") as s:
+        door = _get(db, room_id)
+        s.set_attribute("door.state_before", door.state)
+        if not door.controller_online:
+            s.set_attribute("door.error", "DOOR_CONTROLLER_OFFLINE")
+            raise HardwareError("Door controller is offline",
+                                details={"reason": "DOOR_CONTROLLER_OFFLINE"})
+        if door.state == "SENSOR_ERROR":
+            s.set_attribute("door.error", "DOOR_SENSOR_ERROR")
+            raise HardwareError("Door sensor error", details={"reason": "DOOR_SENSOR_ERROR"})
+        door.locked = False
+        door.state = "UNLOCKED"
+        door.last_unlock_at = datetime.utcnow()
+        db.flush()
+        s.set_attribute("door.state_after", door.state)
+        return serialize(door)
 
 
 def lock(db: Session, room_id) -> dict:
-    door = _get(db, room_id)
-    door.locked = True
-    door.door_open = False
-    door.state = "LOCKED"
-    door.last_lock_at = datetime.utcnow()
-    db.flush()
-    return serialize(door)
+    with span("door.lock"):
+        door = _get(db, room_id)
+        door.locked = True
+        door.door_open = False
+        door.state = "LOCKED"
+        door.last_lock_at = datetime.utcnow()
+        db.flush()
+        return serialize(door)
 
 
 # ── Manual simulator actions (by room code) ───────────────────────────────

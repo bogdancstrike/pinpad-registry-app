@@ -91,9 +91,20 @@ export interface Occupant {
 interface ListResponse<T> { items: T[] }
 interface PagedResponse<T> { items: T[]; total: number; page: number; size: number }
 
+export interface PinpadHints {
+  roomCode: string
+  roomName: string
+  active: boolean
+  pin: string | null
+  people: { personCode: string; fullName: string; active: boolean }[]
+}
+
 // ── Access ─────────────────────────────────────────────────────────────────
 export const submitAccessAttempt = (roomCode: string, enteredCode: string) =>
   apiClient.post<AccessResult>('/api/access/attempt', { roomCode, enteredCode }).then((r) => r.data)
+
+export const getPinpadHints = (roomCode: string) =>
+  apiClient.get<PinpadHints>(`/api/pinpad/${roomCode}/hints`).then((r) => r.data)
 
 // ── People ───────────────────────────────────────────────────────────────
 export const listPeople = () =>

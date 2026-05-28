@@ -13,7 +13,14 @@ from dotenv import load_dotenv  # noqa: E402
 
 load_dotenv()
 
+import os  # noqa: E402
+
 from src.config import Config  # noqa: E402
+
+# The framework's tracing layer reads ENABLE_TRACING straight from the
+# environment (get_tracer / init_tracing), so mirror Config there to keep the
+# two consistent whether or not it was set in .env.
+os.environ["ENABLE_TRACING"] = "true" if Config.ENABLE_TRACING else "false"
 
 
 def build_app():

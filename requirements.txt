@@ -23,6 +23,13 @@ bcrypt>=4.1.0
 # Server
 gunicorn>=21.2.0
 
+# Observability (OpenTelemetry → Jaeger via OTLP gRPC)
+opentelemetry-api>=1.25.0
+opentelemetry-sdk>=1.25.0
+opentelemetry-exporter-otlp-proto-grpc>=1.25.0
+opentelemetry-instrumentation-flask>=0.46b0
+opentelemetry-instrumentation-sqlalchemy>=0.46b0
+
 # Config / utils
 python-dotenv>=1.0.0
 

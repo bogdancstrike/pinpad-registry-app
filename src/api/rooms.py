@@ -28,3 +28,8 @@ def delete(app, operation, request, **kwargs):
     with get_db() as db:
         rooms_service.delete_room(db, view_arg(kwargs, "room_id"))
         return ("", 204)
+
+
+def pinpad_hints(app, operation, request, **kwargs):
+    with get_db() as db:
+        return (rooms_service.pinpad_hints(db, view_arg(kwargs, "room_code")), 200)

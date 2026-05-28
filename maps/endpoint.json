@@ -79,6 +79,11 @@
       "request_method": ["DELETE"], "api_url": "/api/rooms/<room_id>",
       "exec_method": { "module_name": "src.api.rooms", "method_name": "delete" }
     },
+    {
+      "namespace": "pinpad", "operation_name": "pinpad_hints", "model_name": "Empty",
+      "request_method": ["GET"], "api_url": "/api/pinpad/<room_code>/hints",
+      "exec_method": { "module_name": "src.api.rooms", "method_name": "pinpad_hints" }
+    },
 
     {
       "namespace": "pinpad", "operation_name": "permissions_list", "model_name": "Empty",

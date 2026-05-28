@@ -38,8 +38,8 @@ class Config:
     FULL_CODE_LENGTH   = PIN_LENGTH + PERSON_CODE_LENGTH
     DOOR_UNLOCK_SECONDS = int(os.getenv("DOOR_UNLOCK_SECONDS", "5"))
 
-    # ── Tracing (off for the PoC) ──────────────────────────────────────────
-    ENABLE_TRACING = _bool("ENABLE_TRACING", False)
+    # ── Tracing (OpenTelemetry → Jaeger) ───────────────────────────────────
+    ENABLE_TRACING = _bool("ENABLE_TRACING", True)
     OTLP_ENDPOINT  = os.getenv("OTLP_ENDPOINT", "http://localhost:4317")
 
     # ── QF framework legacy keys ───────────────────────────────────────────
