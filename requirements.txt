@@ -1,0 +1,30 @@
+# QF Framework (local wheel — install via: pip install dist/qf-1.0.2-py3-none-any.whl)
+
+# API / framework
+flask>=3.0.0
+flask-restx>=1.3.0
+
+# QF framework transitive deps
+redis>=5.0.0
+kafka-python>=2.0.2
+colorama>=0.4.6
+
+# Database
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.0
+alembic>=1.13.0
+
+# Validation
+pydantic>=2.6.0
+
+# Security
+bcrypt>=4.1.0
+
+# Server
+gunicorn>=21.2.0
+
+# Config / utils
+python-dotenv>=1.0.0
+
+# Testing
+pytest>=8.0.0

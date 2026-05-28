@@ -1,0 +1,182 @@
+{
+  "namespaces": [
+    { "name": "pinpad", "description": "Pinpad access registry API" }
+  ],
+  "models": {
+    "Empty": {}
+  },
+  "endpoints": [
+    {
+      "namespace": "pinpad", "operation_name": "liveness", "model_name": "Empty",
+      "request_method": ["GET"], "api_url": "/liveness",
+      "exec_method": { "module_name": "src.api.health", "method_name": "liveness" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "readiness", "model_name": "Empty",
+      "request_method": ["GET"], "api_url": "/readiness",
+      "exec_method": { "module_name": "src.api.health", "method_name": "readiness" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "health", "model_name": "Empty",
+      "request_method": ["GET"], "api_url": "/health",
+      "exec_method": { "module_name": "src.api.health", "method_name": "health_check" }
+    },
+
+    {
+      "namespace": "pinpad", "operation_name": "access_attempt", "model_name": "Empty",
+      "request_method": ["POST"], "api_url": "/api/access/attempt",
+      "exec_method": { "module_name": "src.api.access", "method_name": "attempt" }
+    },
+
+    {
+      "namespace": "pinpad", "operation_name": "people_list", "model_name": "Empty",
+      "request_method": ["GET"], "api_url": "/api/people",
+      "exec_method": { "module_name": "src.api.people", "method_name": "list_people" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "people_create", "model_name": "Empty",
+      "request_method": ["POST"], "api_url": "/api/people",
+      "exec_method": { "module_name": "src.api.people", "method_name": "create" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "people_get", "model_name": "Empty",
+      "request_method": ["GET"], "api_url": "/api/people/<person_id>",
+      "exec_method": { "module_name": "src.api.people", "method_name": "get_person" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "people_update", "model_name": "Empty",
+      "request_method": ["PUT"], "api_url": "/api/people/<person_id>",
+      "exec_method": { "module_name": "src.api.people", "method_name": "update" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "people_delete", "model_name": "Empty",
+      "request_method": ["DELETE"], "api_url": "/api/people/<person_id>",
+      "exec_method": { "module_name": "src.api.people", "method_name": "delete" }
+    },
+
+    {
+      "namespace": "pinpad", "operation_name": "rooms_list", "model_name": "Empty",
+      "request_method": ["GET"], "api_url": "/api/rooms",
+      "exec_method": { "module_name": "src.api.rooms", "method_name": "list_rooms" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "rooms_create", "model_name": "Empty",
+      "request_method": ["POST"], "api_url": "/api/rooms",
+      "exec_method": { "module_name": "src.api.rooms", "method_name": "create" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "rooms_get", "model_name": "Empty",
+      "request_method": ["GET"], "api_url": "/api/rooms/<room_id>",
+      "exec_method": { "module_name": "src.api.rooms", "method_name": "get_room" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "rooms_update", "model_name": "Empty",
+      "request_method": ["PUT"], "api_url": "/api/rooms/<room_id>",
+      "exec_method": { "module_name": "src.api.rooms", "method_name": "update" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "rooms_delete", "model_name": "Empty",
+      "request_method": ["DELETE"], "api_url": "/api/rooms/<room_id>",
+      "exec_method": { "module_name": "src.api.rooms", "method_name": "delete" }
+    },
+
+    {
+      "namespace": "pinpad", "operation_name": "permissions_list", "model_name": "Empty",
+      "request_method": ["GET"], "api_url": "/api/permissions",
+      "exec_method": { "module_name": "src.api.permissions", "method_name": "list_permissions" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "permissions_create", "model_name": "Empty",
+      "request_method": ["POST"], "api_url": "/api/permissions",
+      "exec_method": { "module_name": "src.api.permissions", "method_name": "create" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "permissions_delete", "model_name": "Empty",
+      "request_method": ["DELETE"], "api_url": "/api/permissions/<permission_id>",
+      "exec_method": { "module_name": "src.api.permissions", "method_name": "delete" }
+    },
+
+    {
+      "namespace": "pinpad", "operation_name": "registry_events", "model_name": "Empty",
+      "request_method": ["GET"], "api_url": "/api/registry/events",
+      "exec_method": { "module_name": "src.api.registry", "method_name": "list_events" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "registry_presence", "model_name": "Empty",
+      "request_method": ["GET"], "api_url": "/api/registry/presence",
+      "exec_method": { "module_name": "src.api.registry", "method_name": "presence" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "registry_room", "model_name": "Empty",
+      "request_method": ["GET"], "api_url": "/api/registry/room/<room_code>",
+      "exec_method": { "module_name": "src.api.registry", "method_name": "by_room" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "registry_person", "model_name": "Empty",
+      "request_method": ["GET"], "api_url": "/api/registry/person/<person_code>",
+      "exec_method": { "module_name": "src.api.registry", "method_name": "by_person" }
+    },
+
+    {
+      "namespace": "pinpad", "operation_name": "hardware_list", "model_name": "Empty",
+      "request_method": ["GET"], "api_url": "/api/mock-hardware/doors",
+      "exec_method": { "module_name": "src.api.hardware", "method_name": "list_doors" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "hardware_get", "model_name": "Empty",
+      "request_method": ["GET"], "api_url": "/api/mock-hardware/doors/<room_code>",
+      "exec_method": { "module_name": "src.api.hardware", "method_name": "get_door" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "hardware_unlock", "model_name": "Empty",
+      "request_method": ["POST"], "api_url": "/api/mock-hardware/doors/<room_code>/unlock",
+      "exec_method": { "module_name": "src.api.hardware", "method_name": "unlock" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "hardware_lock", "model_name": "Empty",
+      "request_method": ["POST"], "api_url": "/api/mock-hardware/doors/<room_code>/lock",
+      "exec_method": { "module_name": "src.api.hardware", "method_name": "lock" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "hardware_force_open", "model_name": "Empty",
+      "request_method": ["POST"], "api_url": "/api/mock-hardware/doors/<room_code>/force-open",
+      "exec_method": { "module_name": "src.api.hardware", "method_name": "force_open" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "hardware_sensor_error", "model_name": "Empty",
+      "request_method": ["POST"], "api_url": "/api/mock-hardware/doors/<room_code>/sensor-error",
+      "exec_method": { "module_name": "src.api.hardware", "method_name": "sensor_error" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "hardware_offline", "model_name": "Empty",
+      "request_method": ["POST"], "api_url": "/api/mock-hardware/doors/<room_code>/offline",
+      "exec_method": { "module_name": "src.api.hardware", "method_name": "offline" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "hardware_online", "model_name": "Empty",
+      "request_method": ["POST"], "api_url": "/api/mock-hardware/doors/<room_code>/online",
+      "exec_method": { "module_name": "src.api.hardware", "method_name": "online" }
+    },
+
+    {
+      "namespace": "pinpad", "operation_name": "monitoring_summary", "model_name": "Empty",
+      "request_method": ["GET"], "api_url": "/api/monitoring/summary",
+      "exec_method": { "module_name": "src.api.monitoring", "method_name": "summary" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "monitoring_doors", "model_name": "Empty",
+      "request_method": ["GET"], "api_url": "/api/monitoring/doors",
+      "exec_method": { "module_name": "src.api.monitoring", "method_name": "doors" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "monitoring_occupancy", "model_name": "Empty",
+      "request_method": ["GET"], "api_url": "/api/monitoring/occupancy",
+      "exec_method": { "module_name": "src.api.monitoring", "method_name": "occupancy" }
+    },
+    {
+      "namespace": "pinpad", "operation_name": "monitoring_denied", "model_name": "Empty",
+      "request_method": ["GET"], "api_url": "/api/monitoring/denied-events",
+      "exec_method": { "module_name": "src.api.monitoring", "method_name": "denied_events" }
+    }
+  ]
+}

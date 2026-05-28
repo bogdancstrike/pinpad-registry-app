@@ -1,0 +1,55 @@
+networks:
+  pinpadnet:
+
+volumes:
+  postgres-data: {}
+
+services:
+  # ── PostgreSQL ──────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: pinpad-postgres
+    networks: [pinpadnet]
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    environment:
+      POSTGRES_USER: "${POSTGRES_USER:-pinpad}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-pinpad}"
+      POSTGRES_DB: "${POSTGRES_DB:-pinpad}"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-pinpad} -d ${POSTGRES_DB:-pinpad}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  # ── Backend (QF Framework API) ──────────────────────────────────────────
+  backend:
+    build: .
+    container_name: pinpad-backend
+    networks: [pinpadnet]
+    depends_on:
+      postgres: { condition: service_healthy }
+    environment:
+      DATABASE_URL: "postgresql+psycopg2://${POSTGRES_USER:-pinpad}:${POSTGRES_PASSWORD:-pinpad}@postgres:5432/${POSTGRES_DB:-pinpad}"
+      ALLOWED_ORIGINS: "*"
+      API_PORT: "5000"
+      PIN_LENGTH: "4"
+      PERSON_CODE_LENGTH: "4"
+      DOOR_UNLOCK_SECONDS: "5"
+    ports:
+      - "${API_PORT:-5000}:5000"
+    restart: unless-stopped
+
+  # ── Frontend (nginx + built SPA) ────────────────────────────────────────
+  frontend:
+    build: ./frontend
+    container_name: pinpad-frontend
+    networks: [pinpadnet]
+    depends_on:
+      - backend
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+    restart: unless-stopped
