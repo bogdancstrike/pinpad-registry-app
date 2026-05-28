@@ -133,7 +133,7 @@ All paths are prefixed with `/pinpad`.
 | GET/PUT/DELETE | `/api/people/<person_id>` | `api.people` |
 | GET/POST | `/api/rooms` | `api.rooms` |
 | GET/PUT/DELETE | `/api/rooms/<room_id>` | `api.rooms` |
-| GET | `/api/pinpad/<room_code>/hints` | `api.rooms.pinpad_hints` |
+| GET | `/api/pinpad/<room_code>/hints` | `api.rooms.pinpad_hints` (PIN, permitted people, **and `inside[]` current occupants**) |
 | GET/POST | `/api/permissions` | `api.permissions` |
 | DELETE | `/api/permissions/<permission_id>` | `api.permissions` |
 | GET | `/api/registry/events` | `api.registry.list_events` |
@@ -231,9 +231,10 @@ seed · test · lint`.
 3. **Pinpad** → Server Room → enter `12340023` (or tap John in the cheat-sheet) → **GRANTED · ENTER** → "You are in Server Room. Exit?".
 4. **Registry** — see the ENTER event, code masked `****0023`.
 5. Press **Yes, exit** (or re-enter the code) → **GRANTED · EXIT**; registry now shows the pair.
-6. Enter `99990023` → **DENIED · INVALID_ROOM_PIN**.
-7. **Door Simulator** → set Server Room *Offline* → pinpad `12340023` → **ERROR · DOOR_CONTROLLER_OFFLINE**.
-8. **Jaeger** (`:16686`) → service `pinpad` → inspect an `access.attempt` trace: `parse → validate → door_unlock → presence → registry_write` with nested SQL spans.
+6. **Exit after "Stay"** — enter `12340023` again → on the in-room screen press **Stay**. John is still inside: the keypad now shows him under **"Currently inside"**. Tap his name (or re-enter `12340023`) → **GRANTED · EXIT**.
+7. Enter `99990023` → **DENIED · INVALID_ROOM_PIN**.
+8. **Door Simulator** → set Server Room *Offline* → pinpad `12340023` → **ERROR · DOOR_CONTROLLER_OFFLINE**.
+9. **Jaeger** (`:16686`) → service `pinpad` → inspect an `access.attempt` trace: `parse → validate → door_unlock → presence → registry_write` with nested SQL spans.
 
 ---
 
@@ -264,6 +265,7 @@ ERROR. Plus monitoring summary counts and registry pagination/filters.
 4. Pinpad terminal opens per room, shows demo cheat-sheet. ✔
 5. Valid code → GRANTED, door UNLOCKED, ENTER recorded. ✔
 6. In-room screen offers exit; confirming records EXIT. ✔
+6a. Choosing **Stay** is not a dead-end — the occupant stays inside and can exit later by re-entering their code or tapping themselves under "Currently inside". ✔
 7. Wrong PIN / unknown person / no permission → DENIED with reason. ✔
 8. Door offline → ERROR (`DOOR_CONTROLLER_OFFLINE`). ✔
 9. Registry lists all events (masked code), filterable & paginated. ✔
@@ -279,6 +281,7 @@ ERROR. Plus monitoring summary counts and registry pagination/filters.
 | Risk | Mitigation |
 |------|------------|
 | ENTER/EXIT ambiguity (same code) | Direction derived from presence; in-room exit screen makes it explicit; monitoring shows who's inside. |
+| "Stay" leaves a person with no way out | Not a dead-end: presence-based toggle means re-entering the code exits. The keypad's "Currently inside" panel surfaces open occupants with tap-to-exit so it's discoverable. |
 | PIN sharing | Accepted for PoC; production path is badge+PIN / MFA + rate limiting. |
 | Race on simultaneous attempts | Room row `FOR UPDATE` + partial unique presence index. |
 | Audit tampering | Append-only events, no mutation endpoints; production: hash-chaining + restricted DB. |

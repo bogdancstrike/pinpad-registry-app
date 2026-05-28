@@ -446,15 +446,24 @@ The pinpad is a small state machine (`PinpadPage.tsx`):
 
 ```
 input ──submit──▶ GRANTED+ENTER ──▶ "You are in {room}. Exit?"  (inside)
-  ▲                                   │ Yes → re-submit code → EXIT
-  │                                   │ Stay → back to input
+  ▲   ▲                               │ Yes → re-submit code → EXIT
+  │   │                               │ Stay → back to input (still inside)
+  │   └── re-enter code / tap "Currently inside" ──▶ EXIT
   └───── result (EXIT / DENIED / ERROR) ◀── GRANTED+EXIT / DENIED / ERROR
 ```
 
-A PoC "Demo codes" card shows the room PIN and permitted people (from
-`GET /pinpad/api/pinpad/{room_code}/hints`); tapping a person auto-fills their
-full code. The kiosk route renders outside the admin shell for a clean
-terminal look.
+**Exiting after "Stay".** Direction is derived from presence, so a person who
+chooses *Stay* (or simply walks away while inside) is never stuck: returning to
+the terminal and entering their code again resolves to **EXIT**. To make this
+obvious, the input screen shows a **"Currently inside"** card listing the room's
+open occupants — tapping a name submits an exit for that person immediately.
+
+The data comes from `GET /pinpad/api/pinpad/{room_code}/hints`, which returns
+the room PIN, the people permitted in the room, **and** the people currently
+inside (`inside[]`). The query auto-refreshes (5 s) and is invalidated after
+every attempt, so the occupancy list stays live. A PoC "Demo codes" card also
+shows the PIN and permitted people; tapping a person auto-fills their full code.
+The kiosk route renders outside the admin shell for a clean terminal look.
 
 ---
 

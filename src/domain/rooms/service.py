@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from src.common.errors import ConflictError, NotFoundError, ValidationError
 from src.common.security import hash_pin
 from src.config import Config
-from src.domain.models import AccessPermission, MockDoorDevice, Person, Room
+from src.domain.models import AccessPermission, MockDoorDevice, Person, Room, RoomPresence
 
 
 def serialize(r: Room) -> dict:
@@ -92,6 +92,14 @@ def pinpad_hints(db: Session, room_code: str) -> dict:
         .where(AccessPermission.room_id == room.id, AccessPermission.active.is_(True))
         .order_by(Person.full_name)
     ).scalars().all()
+    # People currently inside this room — so a person who "stayed" can see they
+    # are still in and exit by entering their code again.
+    inside = db.execute(
+        select(Person, RoomPresence)
+        .join(RoomPresence, RoomPresence.person_id == Person.id)
+        .where(RoomPresence.room_id == room.id, RoomPresence.active.is_(True))
+        .order_by(RoomPresence.entered_at.desc())
+    ).all()
     return {
         "roomCode": room.code,
         "roomName": room.name,
@@ -100,6 +108,14 @@ def pinpad_hints(db: Session, room_code: str) -> dict:
         "people": [
             {"personCode": p.person_code, "fullName": p.full_name, "active": p.active}
             for p in rows
+        ],
+        "inside": [
+            {
+                "personCode": p.person_code,
+                "fullName": p.full_name,
+                "enteredAt": pr.entered_at.isoformat() if pr.entered_at else None,
+            }
+            for p, pr in inside
         ],
     }
 

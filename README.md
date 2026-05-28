@@ -32,7 +32,9 @@ and traced in Jaeger.
 
 - **Pinpad kiosk** — a full-screen door terminal with a numeric keypad. Enter
   → an in-room *"Do you want to exit?"* screen so enters and exits are explicit
-  and paired in the registry.
+  and paired in the registry. If a person chooses *Stay*, they're never stuck:
+  the keypad lists who's **currently inside** with tap-to-exit (or just re-enter
+  the code).
 - **Smart ENTER/EXIT** — direction is derived from current presence, not chosen
   by the user.
 - **Admin back office** — CRUD for people, rooms (PINs hashed on save), and

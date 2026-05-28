@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button, Typography, theme as antTheme, Result, Space, Card, Tag, Divider, Spin } from 'antd'
 import {
   DeleteOutlined, CheckOutlined, ArrowLeftOutlined, LogoutOutlined, HomeOutlined,
@@ -17,6 +17,7 @@ export function PinpadPage() {
   const { roomCode } = useParams<{ roomCode: string }>()
   const navigate = useNavigate()
   const { token } = antTheme.useToken()
+  const qc = useQueryClient()
 
   const [code, setCode] = useState('')
   const [screen, setScreen] = useState<Screen>('input')
@@ -28,6 +29,7 @@ export function PinpadPage() {
     queryKey: ['pinpad-hints', roomCode],
     queryFn: () => getPinpadHints(roomCode!),
     enabled: !!roomCode,
+    refetchInterval: 5_000,      // keep the "currently inside" list fresh
   })
 
   const maxLen = 8
@@ -49,6 +51,8 @@ export function PinpadPage() {
     } finally {
       setSubmitting(false)
       setCode('')
+      // Presence may have changed → refresh the "currently inside" list.
+      qc.invalidateQueries({ queryKey: ['pinpad-hints', roomCode] })
     }
   }
 
@@ -95,6 +99,10 @@ export function PinpadPage() {
           </Button>
           <Button size="large" onClick={reset}>Stay</Button>
         </Space>
+        <Paragraph type="secondary" style={{ marginTop: 16, marginBottom: 0, fontSize: 12 }}>
+          If you stay, you can exit later: come back to this terminal and enter
+          your code again (or tap your name under “Currently inside”).
+        </Paragraph>
       </Card>,
     )
   }
@@ -152,6 +160,27 @@ export function PinpadPage() {
           {keyBtn(<CheckOutlined />, () => send(code), false, true)}
         </div>
       </div>
+
+      {/* Currently inside — lets a "stayed" person exit directly */}
+      {(hints.data?.inside || []).length > 0 && (
+        <Card size="small" style={{ width: 360 }}
+              title={<Space><HomeOutlined />Currently inside</Space>}>
+          <Text type="secondary">Tap your name to exit the room:</Text>
+          <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
+            {(hints.data?.inside || []).map((p) => (
+              <Button key={p.personCode} block danger icon={<LogoutOutlined />}
+                      loading={submitting}
+                      disabled={!hints.data?.pin}
+                      onClick={() => send(`${hints.data?.pin ?? ''}${p.personCode}`)}>
+                <Space style={{ width: '100%', justifyContent: 'space-between' }}>
+                  <span>{p.fullName} <Tag>{p.personCode}</Tag></span>
+                  <span>Exit</span>
+                </Space>
+              </Button>
+            ))}
+          </div>
+        </Card>
+      )}
 
       {/* Demo cheat-sheet — PoC only */}
       <Card size="small" style={{ width: 360 }} title={<Space><span>🧪</span>Demo codes (PoC)</Space>}>

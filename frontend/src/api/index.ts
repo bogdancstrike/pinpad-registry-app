@@ -97,6 +97,7 @@ export interface PinpadHints {
   active: boolean
   pin: string | null
   people: { personCode: string; fullName: string; active: boolean }[]
+  inside: { personCode: string; fullName: string; enteredAt: string | null }[]
 }
 
 // ── Access ─────────────────────────────────────────────────────────────────
