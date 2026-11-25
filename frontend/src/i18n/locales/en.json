@@ -162,5 +162,7 @@
   "door.UNLOCKED": "Unlocked",
   "door.FORCED_OPEN": "Forced open",
   "door.SENSOR_ERROR": "Sensor error",
-  "door.OFFLINE": "Offline"
+  "door.OFFLINE": "Offline",
+  "dashboard.state": "State",
+  "common.reasonHeader": "Reason"
 }

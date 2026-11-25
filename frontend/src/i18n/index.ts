@@ -43,4 +43,5 @@ export function setLocale(code: string) {
   return i18n.changeLanguage(code)
 }
 
+export { i18n }
 export default i18n

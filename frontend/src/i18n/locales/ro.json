@@ -162,5 +162,7 @@
   "door.UNLOCKED": "Deblocată",
   "door.FORCED_OPEN": "Forțată deschis",
   "door.SENSOR_ERROR": "Eroare senzor",
-  "door.OFFLINE": "Offline"
+  "door.OFFLINE": "Offline",
+  "dashboard.state": "Stare",
+  "common.reasonHeader": "Motiv"
 }
