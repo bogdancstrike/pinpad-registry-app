@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { screen, within } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import { renderApp, setBrowserLanguages } from '@/test/renderApp'
 
 // i18n-17: Dashboard rendered in Romanian with mocked API responses
@@ -32,6 +32,8 @@ describe('Dashboard in Romanian', () => {
     setBrowserLanguages(['en-US'])
     renderApp('/dashboard')
     const label = await screen.findByText('Acordat azi')
-    expect(within(label.closest('.ant-statistic') as HTMLElement).getByText('1.234')).toBeInTheDocument()
+    const statistic = label.closest('.ant-statistic') as HTMLElement
+    // antd splits the value at the decimal dot into separate spans, so match the value text.
+    await waitFor(() => expect(statistic.querySelector('.ant-statistic-content')?.textContent).toBe('1.234'))
   })
 })
