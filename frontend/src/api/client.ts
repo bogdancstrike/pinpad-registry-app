@@ -14,8 +14,13 @@ apiClient.interceptors.response.use(
   (r) => r,
   (err) => {
     const data = err.response?.data
-    const msg = data?.message || data?.error || err.message || 'Request failed'
-    return Promise.reject(new Error(msg))
+    // Keep the API code and reason so the UI can translate them. The English
+    // message is kept for logs only and is not shown to the user.
+    const error = Object.assign(new Error(data?.message || err.message || 'Request failed'), {
+      code: typeof data?.error === 'string' ? data.error : undefined,
+      reason: typeof data?.details?.reason === 'string' ? data.details.reason : undefined,
+    })
+    return Promise.reject(error)
   },
 )
 

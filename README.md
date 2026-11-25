@@ -43,6 +43,10 @@ and traced in Jaeger.
   (`****0023`), filterable and paginated.
 - **Live monitoring** — KPIs, current room occupancy, door states, recent
   denials (auto-refreshing).
+- **English and Romanian UI** — switch language from the sidebar (or the header
+  on mobile). The choice is remembered per browser; on a first visit the browser
+  language is used when it is supported, otherwise English. Dates and numbers
+  follow the chosen language and API error codes are shown as translated text.
 - **Mock door hardware** — drive abnormal states (offline, sensor-error,
   forced-open) from a simulator page to demo failure scenarios.
 - **Distributed tracing** — custom domain spans across the access flow, nested
@@ -58,7 +62,7 @@ and traced in Jaeger.
 | Data | SQLAlchemy 2.x · PostgreSQL 16 · Alembic |
 | Security | bcrypt PIN hashing · entered-code masking |
 | Tracing | OpenTelemetry → Jaeger (OTLP gRPC) |
-| Frontend | React 19 · TypeScript · Vite · Ant Design 5 · TanStack Query · Zustand |
+| Frontend | React 19 · TypeScript · Vite · Ant Design 5 · TanStack Query · Zustand · i18next |
 | Deploy | Docker Compose (postgres · jaeger · backend · frontend/nginx) |
 
 ## 🗺️ Architecture at a glance
@@ -108,6 +112,7 @@ make backend            # http://localhost:5000
 # in a second shell
 make frontend-install
 make frontend           # http://localhost:5173 (proxies /pinpad → :5000)
+make frontend-test      # Vitest + React Testing Library suite
 ```
 
 ## 🎬 Try it — demo data & codes
@@ -171,7 +176,7 @@ src/
   api/                  thin handlers, one module per resource
 migrations/             Alembic
 scripts/seed.py         demo data
-frontend/               Vite + AntD SPA (pages, api client, stores)
+frontend/               Vite + AntD SPA (pages, api client, stores, i18n)
 docs/                   architecture.md · impl_plan.md
 ```
 

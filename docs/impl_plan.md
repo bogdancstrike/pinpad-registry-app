@@ -15,7 +15,7 @@ A demonstrative room access-control system:
 
 ```
 Backend   : Python 3.12 + QF Framework (dynamic endpoints) + SQLAlchemy + PostgreSQL
-Frontend  : React 19 + TypeScript + Vite + Ant Design 5
+Frontend  : React 19 + TypeScript + Vite + Ant Design 5 + i18next (EN, RO)
 Tracing   : OpenTelemetry → Jaeger
 Deployment: Docker Compose
 Hardware  : mocked pinpad terminal + mocked door controller (DB-backed state)
@@ -84,7 +84,8 @@ pinpad-app/
         ├── main.tsx App.tsx index.css
         ├── api/{client,index}.ts
         ├── stores/themeStore.ts
-        ├── components/common.tsx
+        ├── i18n/               # config, locales/{en,ro}.json, formatters, error mapping, tests
+        ├── components/common.tsx · LanguageSwitcher.tsx
         └── pages/*.tsx
 ```
 
@@ -201,7 +202,7 @@ make frontend           # http://localhost:5173 (proxies /pinpad → :5000)
 ```
 
 Make targets: `install · backend · infra · up · down · logs ·
-frontend-install · frontend · frontend-build · migrate · migrate-revision ·
+frontend-install · frontend · frontend-build · frontend-test · migrate · migrate-revision ·
 seed · test · lint`.
 
 ---
@@ -250,6 +251,11 @@ hash/verify, code masking (`12340023 → ****0023`), validator reason codes.
 **Integration (with Postgres):** valid code → ENTER then EXIT on repeat; wrong
 PIN → DENIED; unknown person → DENIED; no permission → DENIED; door offline →
 ERROR. Plus monitoring summary counts and registry pagination/filters.
+
+**Frontend:** `make frontend-test` runs the Vitest + React Testing Library suite in
+`frontend/src/i18n/`: the language switcher, a translated Dashboard, locale
+resolution and fallback, formatters, API error mapping, and a check that
+Romanian has no English leftovers on the sweep pages.
 
 > `make test` / a `tests/` suite is the natural next step; the project is
 > structured so services are directly unit-testable and the access flow is
