@@ -1,4 +1,4 @@
-.PHONY: install backend infra up down logs frontend frontend-install frontend-build migrate migrate-revision seed test lint
+.PHONY: install backend infra up down logs frontend frontend-install frontend-build frontend-test migrate migrate-revision seed test lint
 
 PYTHON := .venv/bin/python
 PIP    := .venv/bin/pip
@@ -35,6 +35,9 @@ frontend:
 
 frontend-build:
 	cd frontend && npm run build
+
+frontend-test:
+	cd frontend && npm test
 
 # ── DB / data ────────────────────────────────────────────────────────────────
 migrate:
