@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import { Card, Col, Row, Typography, Empty, Spin, Tag } from 'antd'
 import { NumberOutlined } from '@ant-design/icons'
 import { listRooms } from '@/api'
+import { useTranslation } from 'react-i18next'
 
 const { Title, Text } = Typography
 
 export function PinpadLauncherPage() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const rooms = useQuery({ queryKey: ['rooms'], queryFn: listRooms })
 
@@ -14,8 +16,8 @@ export function PinpadLauncherPage() {
 
   return (
     <div>
-      <Title level={2}>Pinpad terminals</Title>
-      <Text type="secondary">Pick a room to open its door terminal.</Text>
+      <Title level={2}>{t('launcher.title')}</Title>
+      <Text type="secondary">{t('launcher.subtitle')}</Text>
       <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
         {(rooms.data || []).map((room) => (
           <Col key={room.id} xs={24} sm={12} md={8} lg={6}>
@@ -24,12 +26,12 @@ export function PinpadLauncherPage() {
               <Title level={4} style={{ marginTop: 12, marginBottom: 4 }}>{room.name}</Title>
               <Text type="secondary">{room.code}</Text>
               <div style={{ marginTop: 8 }}>
-                <Tag color={room.active ? 'green' : 'default'}>{room.active ? 'active' : 'inactive'}</Tag>
+                <Tag color={room.active ? 'green' : 'default'}>{room.active ? t('common.active') : t('common.inactive')}</Tag>
               </div>
             </Card>
           </Col>
         ))}
-        {(rooms.data || []).length === 0 && <Empty description="No rooms yet" style={{ margin: '40px auto' }} />}
+        {(rooms.data || []).length === 0 && <Empty description={t('launcher.noRooms')} style={{ margin: '40px auto' }} />}
       </Row>
     </div>
   )

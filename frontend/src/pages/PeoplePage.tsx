@@ -6,10 +6,13 @@ import {
 import type { ColumnsType } from 'antd/es/table'
 import { PlusOutlined } from '@ant-design/icons'
 import { createPerson, deletePerson, listPeople, updatePerson, type Person } from '@/api'
+import { useTranslation } from 'react-i18next'
+import { translateError } from '@/i18n/errors'
 
 const { Title } = Typography
 
 export function PeoplePage() {
+  const { t } = useTranslation()
   const qc = useQueryClient()
   const { message } = App.useApp()
   const [editing, setEditing] = useState<Partial<Person> | null>(null)
@@ -21,17 +24,17 @@ export function PeoplePage() {
     mutationFn: (values: Partial<Person>) =>
       editing?.id ? updatePerson(editing.id, values) : createPerson(values),
     onSuccess: () => {
-      message.success('Saved')
+      message.success(t('common.saved'))
       setEditing(null)
       qc.invalidateQueries({ queryKey: ['people'] })
     },
-    onError: (e) => message.error((e as Error).message),
+    onError: (e) => message.error(translateError(e)),
   })
 
   const remove = useMutation({
     mutationFn: (id: string) => deletePerson(id),
-    onSuccess: () => { message.success('Deleted'); qc.invalidateQueries({ queryKey: ['people'] }) },
-    onError: (e) => message.error((e as Error).message),
+    onSuccess: () => { message.success(t('common.deleted')); qc.invalidateQueries({ queryKey: ['people'] }) },
+    onError: (e) => message.error(translateError(e)),
   })
 
   const open = (p?: Person) => {
@@ -40,17 +43,17 @@ export function PeoplePage() {
   }
 
   const columns: ColumnsType<Person> = [
-    { title: 'Code', dataIndex: 'personCode', width: 100, render: (v) => <Tag>{v}</Tag> },
-    { title: 'Full Name', dataIndex: 'fullName' },
-    { title: 'Department', dataIndex: 'department' },
-    { title: 'Role', dataIndex: 'role' },
-    { title: 'Active', dataIndex: 'active', width: 90, render: (a) => <Tag color={a ? 'green' : 'default'}>{a ? 'yes' : 'no'}</Tag> },
+    { title: t('common.code'), dataIndex: 'personCode', width: 100, render: (v) => <Tag>{v}</Tag> },
+    { title: t('people.fullName'), dataIndex: 'fullName' },
+    { title: t('people.department'), dataIndex: 'department' },
+    { title: t('people.role'), dataIndex: 'role' },
+    { title: t('common.active'), dataIndex: 'active', width: 90, render: (a) => <Tag color={a ? 'green' : 'default'}>{a ? t('common.yes') : t('common.no')}</Tag> },
     {
-      title: 'Actions', width: 160, render: (_, p) => (
+      title: t('common.actions'), width: 160, render: (_, p) => (
         <Space>
-          <Button size="small" onClick={() => open(p)}>Edit</Button>
-          <Popconfirm title="Delete person?" onConfirm={() => remove.mutate(p.id)}>
-            <Button size="small" danger>Delete</Button>
+          <Button size="small" onClick={() => open(p)}>{t('common.edit')}</Button>
+          <Popconfirm title={t('people.deletePerson')} onConfirm={() => remove.mutate(p.id)}>
+            <Button size="small" danger>{t('common.delete')}</Button>
           </Popconfirm>
         </Space>
       ),
@@ -60,13 +63,13 @@ export function PeoplePage() {
   return (
     <div>
       <Space style={{ width: '100%', justifyContent: 'space-between', marginBottom: 16 }}>
-        <Title level={2} style={{ margin: 0 }}>People</Title>
-        <Button type="primary" icon={<PlusOutlined />} onClick={() => open()}>New person</Button>
+        <Title level={2} style={{ margin: 0 }}>{t('people.title')}</Title>
+        <Button type="primary" icon={<PlusOutlined />} onClick={() => open()}>{t('people.newPerson')}</Button>
       </Space>
       <Table rowKey="id" loading={people.isLoading} columns={columns} dataSource={people.data || []} />
 
       <Modal
-        title={editing?.id ? 'Edit person' : 'New person'}
+        title={editing?.id ? t('people.editPerson') : t('people.newPerson')}
         open={!!editing}
         onCancel={() => setEditing(null)}
         onOk={() => form.submit()}
@@ -74,13 +77,13 @@ export function PeoplePage() {
         destroyOnClose
       >
         <Form form={form} layout="vertical" onFinish={(v) => save.mutate(v)}>
-          <Form.Item name="personCode" label="Person code (e.g. 0023)" rules={[{ required: true }]}>
+          <Form.Item name="personCode" label={t('people.personCode')} rules={[{ required: true }]}>
             <Input disabled={!!editing?.id} maxLength={20} />
           </Form.Item>
-          <Form.Item name="fullName" label="Full name" rules={[{ required: true }]}><Input /></Form.Item>
-          <Form.Item name="department" label="Department"><Input /></Form.Item>
-          <Form.Item name="role" label="Role"><Input /></Form.Item>
-          <Form.Item name="active" label="Active" valuePropName="checked"><Switch /></Form.Item>
+          <Form.Item name="fullName" label={t('people.fullNameLabel')} rules={[{ required: true }]}><Input /></Form.Item>
+          <Form.Item name="department" label={t('people.departmentLabel')}><Input /></Form.Item>
+          <Form.Item name="role" label={t('people.roleLabel')}><Input /></Form.Item>
+          <Form.Item name="active" label={t('common.active')} valuePropName="checked"><Switch /></Form.Item>
         </Form>
       </Modal>
     </div>

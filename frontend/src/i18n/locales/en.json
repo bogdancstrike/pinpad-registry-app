@@ -1,0 +1,218 @@
+{
+  "app": {
+    "documentTitle": "Pinpad · Access Registry",
+    "brand": "Pinpad",
+    "subtitle": "PIN-Based Room Access Registry Simulator"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "pinpad": "Pinpad",
+    "people": "People",
+    "rooms": "Rooms",
+    "permissions": "Permissions",
+    "registry": "Registry",
+    "monitoring": "Monitoring",
+    "hardware": "Door Simulator"
+  },
+  "language": {
+    "label": "Language"
+  },
+  "theme": {
+    "light": "light",
+    "dark": "dark",
+    "switchTo": "Switch to {{mode}} mode"
+  },
+  "common": {
+    "saved": "Saved",
+    "deleted": "Deleted",
+    "yes": "yes",
+    "no": "no",
+    "active": "Active",
+    "inactive": "inactive",
+    "actions": "Actions",
+    "edit": "Edit",
+    "delete": "Delete",
+    "exit": "Exit",
+    "code": "Code",
+    "name": "Name",
+    "room": "Room",
+    "person": "Person",
+    "time": "Time",
+    "reason": "Reason",
+    "decision": "Decision",
+    "state": "State",
+    "description": "Description"
+  },
+  "decision": {
+    "GRANTED": "GRANTED",
+    "DENIED": "DENIED",
+    "ERROR": "ERROR"
+  },
+  "eventType": {
+    "ENTER": "ENTER",
+    "EXIT": "EXIT",
+    "DENIED": "DENIED",
+    "SYSTEM_ERROR": "SYSTEM_ERROR",
+    "HARDWARE_EVENT": "HARDWARE_EVENT"
+  },
+  "doorState": {
+    "LOCKED": "LOCKED",
+    "UNLOCKED": "UNLOCKED",
+    "FORCED_OPEN": "FORCED_OPEN",
+    "SENSOR_ERROR": "SENSOR_ERROR",
+    "OFFLINE": "OFFLINE"
+  },
+  "reason": {
+    "INVALID_CODE_FORMAT": "The code format is invalid.",
+    "INVALID_CODE_LENGTH": "The code has the wrong length.",
+    "ROOM_NOT_FOUND": "Room not found.",
+    "PERSON_NOT_FOUND": "Person not found.",
+    "ROOM_INACTIVE": "This room is inactive.",
+    "PERSON_INACTIVE": "This person is inactive.",
+    "INVALID_ROOM_PIN": "Wrong room PIN.",
+    "PERSON_HAS_NO_PERMISSION_FOR_ROOM": "No permission for this room.",
+    "PERMISSION_NOT_YET_VALID": "Permission is not valid yet.",
+    "PERMISSION_EXPIRED": "Permission has expired.",
+    "DOOR_CONTROLLER_OFFLINE": "Door controller is offline.",
+    "DOOR_SENSOR_ERROR": "Door sensor error.",
+    "HARDWARE_ERROR": "Hardware error."
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "Cannot reach the server. Check your connection.",
+    "not_found": "Not found.",
+    "conflict": "This item already exists or conflicts with existing data.",
+    "validation_error": "Please check the entered values.",
+    "hardware_error": "Door hardware error."
+  },
+  "access": {
+    "granted": "Access granted. {{eventType}} registered.",
+    "denied": "Access denied."
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "totalRooms": "Total rooms",
+    "activePeople": "Active people",
+    "currentlyInside": "Currently inside",
+    "grantedToday": "Granted today",
+    "deniedToday": "Denied today",
+    "doorsOffline": "Doors offline",
+    "since": "Since",
+    "doorStates": "Door states",
+    "recentDenied": "Recent denied / error attempts",
+    "nobodyInside": "Nobody inside",
+    "noDoors": "No doors"
+  },
+  "door": {
+    "title": "Door Simulator",
+    "subtitle": "Manually drive mocked door hardware to demo abnormal scenarios.",
+    "locked": "Locked",
+    "controller": "Controller",
+    "lastUnlock": "Last unlock",
+    "yes": "yes",
+    "no": "no",
+    "online": "online",
+    "offline": "offline",
+    "actionDone": "{{action}} → {{code}}",
+    "actions": {
+      "unlock": "Unlock",
+      "lock": "Lock",
+      "force-open": "Force open",
+      "sensor-error": "Sensor error",
+      "offline": "Offline",
+      "online": "Online"
+    },
+    "buttons": {
+      "unlock": "Unlock",
+      "lock": "Lock",
+      "force-open": "Force open",
+      "sensor-error": "Sensor error",
+      "offline": "Offline",
+      "online": "Online"
+    }
+  },
+  "monitoring": {
+    "title": "Monitoring",
+    "subtitle": "Live door state and room occupancy (auto-refreshes every 5s).",
+    "doors": "Doors",
+    "locked": "Locked",
+    "unlocked": "Unlocked",
+    "online": "Online",
+    "offline": "Offline",
+    "currentlyInside": "Currently inside",
+    "entered": "Entered",
+    "noDoors": "No doors",
+    "nobodyInside": "Nobody inside"
+  },
+  "launcher": {
+    "title": "Pinpad terminals",
+    "subtitle": "Pick a room to open its door terminal.",
+    "noRooms": "No rooms yet"
+  },
+  "pinpad": {
+    "doorTerminal": "DOOR TERMINAL",
+    "enterCode": "enter code",
+    "inRoom": "You are in {{room}}",
+    "exitPrompt": "{{person}} entered the room. Do you want to exit now?",
+    "yesExit": "Yes, exit room",
+    "stay": "Stay",
+    "stayHelp": "If you stay, you can exit later: come back to this terminal and enter your code again (or tap your name under “Currently inside”).",
+    "left": "You have left {{room}}",
+    "grantedTitle": "Access granted · {{eventType}}",
+    "reason": "Reason: {{reason}}",
+    "backToKeypad": "Back to keypad",
+    "currentlyInside": "Currently inside",
+    "tapToExit": "Tap your name to exit the room:",
+    "demoTitle": "Demo codes (PoC)",
+    "roomPin": "Room PIN:",
+    "tapToFill": "Tap a person to auto-fill their full code:",
+    "noPermission": "No one has permission for this room yet."
+  },
+  "people": {
+    "title": "People",
+    "newPerson": "New person",
+    "editPerson": "Edit person",
+    "deletePerson": "Delete person?",
+    "fullName": "Full Name",
+    "department": "Department",
+    "role": "Role",
+    "personCode": "Person code (e.g. 0023)",
+    "fullNameLabel": "Full name",
+    "departmentLabel": "Department",
+    "roleLabel": "Role"
+  },
+  "rooms": {
+    "title": "Rooms",
+    "newRoom": "New room",
+    "editRoom": "Edit room",
+    "deleteRoom": "Delete room?",
+    "roomCode": "Code (e.g. SERVER_ROOM)",
+    "roomName": "Name",
+    "descriptionLabel": "Description",
+    "newPin": "New PIN (leave blank to keep)",
+    "roomPin": "Room PIN (4 digits)",
+    "pinDigits": "4 digits",
+    "pinHashed": "The PIN is hashed (bcrypt) before storage."
+  },
+  "permissions": {
+    "title": "Permissions",
+    "grantAccess": "Grant access",
+    "person": "Person",
+    "room": "Room",
+    "validFrom": "Valid From",
+    "validUntil": "Valid Until",
+    "revoke": "Revoke",
+    "revokePermission": "Revoke permission?",
+    "granted": "Permission granted",
+    "revoked": "Revoked"
+  },
+  "registry": {
+    "title": "Registry",
+    "roomCode": "Room code",
+    "eventType": "Event type",
+    "total_one": "Total {{count}} event",
+    "total_other": "Total {{count}} events",
+    "event": "Event",
+    "codeColumn": "Code"
+  }
+}
