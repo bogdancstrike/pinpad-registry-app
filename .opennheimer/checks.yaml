@@ -1,0 +1,11 @@
+# Opennheimer's gate for this project, found by discovery and confirmed by running each command in a
+# sandbox (OPN-PRJ-002). Edit freely; the gate runs these commands, in this order, on every change.
+# Found but failing today, so not part of the gate yet:
+#   make-test: `make test` (exit 127)
+checks:
+- id: frontend-typecheck
+  command: cd frontend && npm ci --no-audit --no-fund --ignore-scripts && npx tsc --noEmit
+  required: true
+  timeout_s: 900
+  paths:
+  - frontend/**
