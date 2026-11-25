@@ -43,86 +43,86 @@ Codes SHALL remain as returned by the API.
 ## Scenarios
 
 ### Scenario: Switching to Romanian translates the admin shell
-- **ID**: i18n-switch-shell
+- **ID**: SC-01
 - **GIVEN** the admin dashboard is open in English with no saved language choice
 - **WHEN** the user selects "Română" in the language switcher in the header
 - **THEN** the navigation labels, header subtitle, page title and theme tooltip are shown in Romanian
 - **AND** no English navigation label or header text remains on screen
 
 ### Scenario: Switching language translates every admin page
-- **ID**: i18n-switch-all-pages
+- **ID**: SC-02
 - **GIVEN** the language is set to Romanian
 - **WHEN** the user opens each of Dashboard, People, Rooms, Permissions, Registry, Monitoring and Door Simulator
 - **THEN** every visible label, heading, table column, button and empty-state text on each page is in Romanian
 - **AND** no English user-facing text is visible (brand names "Pinpad" and "PIN" are excepted)
 
 ### Scenario: Chosen language survives a reload
-- **ID**: i18n-persist-reload
+- **ID**: SC-03
 - **GIVEN** the user selected Romanian in the switcher
 - **WHEN** the page is reloaded
 - **THEN** the interface is shown in Romanian
 - **AND** the switcher shows Romanian as selected
 
 ### Scenario: Chosen language is stored under the agreed key
-- **ID**: i18n-storage-key
+- **ID**: SC-04
 - **GIVEN** the user selects Romanian
 - **WHEN** the browser's local storage is inspected
 - **THEN** the key `pinpad-language` holds the value `ro`
 
 ### Scenario: Romanian browser opens in Romanian on first visit
-- **ID**: i18n-browser-default-ro
+- **ID**: SC-05
 - **GIVEN** no `pinpad-language` value is stored and the browser language is `ro-RO`
 - **WHEN** the user opens the interface for the first time
 - **THEN** the interface is shown in Romanian
 - **AND** the switcher shows Romanian as selected
 
 ### Scenario: Unsupported browser language falls back to English
-- **ID**: i18n-browser-default-en
+- **ID**: SC-06
 - **GIVEN** no `pinpad-language` value is stored and the browser language is `fr-FR`
 - **WHEN** the user opens the interface for the first time
 - **THEN** the interface is shown in English
 
 ### Scenario: Saved choice overrides the browser language
-- **ID**: i18n-saved-overrides-browser
+- **ID**: SC-07
 - **GIVEN** `pinpad-language` is `en` and the browser language is `ro-RO`
 - **WHEN** the user opens the interface
 - **THEN** the interface is shown in English
 
 ### Scenario: Dates are formatted for the active language
-- **ID**: i18n-dates-locale
+- **ID**: SC-08
 - **GIVEN** a registry event created at 2025-11-25 14:03:00 exists
 - **WHEN** the Registry page is shown in English and then in Romanian
 - **THEN** the English view shows the timestamp as `2025-11-25 14:03:00`
 - **AND** the Romanian view shows the timestamp as `25.11.2025 14:03:00`
 
 ### Scenario: Numbers are formatted for the active language
-- **ID**: i18n-numbers-locale
+- **ID**: SC-09
 - **GIVEN** the Monitoring page shows a count of 1234 events
 - **WHEN** the page is shown in Romanian
 - **THEN** the count is shown as `1.234`
 
 ### Scenario: Known API error code is shown translated
-- **ID**: i18n-error-code-translated
+- **ID**: SC-10
 - **GIVEN** the language is Romanian
 - **WHEN** the kiosk submits a code of the wrong length and the API returns reason `INVALID_CODE_LENGTH`
 - **THEN** the result screen shows the Romanian text mapped to `INVALID_CODE_LENGTH`
 - **AND** the English API message is not shown
 
 ### Scenario: Unknown API error falls back to the API message
-- **ID**: i18n-error-unknown-fallback
+- **ID**: SC-11
 - **GIVEN** the language is Romanian
 - **WHEN** an API call fails with an error code that has no translation and a message "Something odd"
 - **THEN** the interface shows "Something odd" as the error text
 
 ### Scenario: Kiosk screens follow the language choice
-- **ID**: i18n-kiosk-language
+- **ID**: SC-12
 - **GIVEN** the language is set to Romanian
 - **WHEN** the pinpad kiosk for a room is opened at `/pinpad/<roomCode>`
 - **THEN** the keypad, prompts and result screens are shown in Romanian
 - **AND** the language switcher on the kiosk changes the language without reload
 
 ### Scenario: Adding a language needs only a file and one config entry
-- **ID**: i18n-add-language
+- **ID**: SC-13
 - **GIVEN** a developer adds a translation file for French and one entry for `fr` in the language configuration
 - **WHEN** the interface is built and a browser with language `fr-FR` opens it
 - **THEN** the interface is shown in French and the switcher lists French
