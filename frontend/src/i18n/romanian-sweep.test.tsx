@@ -32,7 +32,7 @@ const NAV_ROUTES = [
   ['Permissions', 'Permisiuni'],
   ['Registry', 'Registru'],
   ['Monitoring', 'Monitorizare'],
-  ['Door Simulator', 'Simulator uşă'],
+  ['Door Simulator', 'Simulator ușă'],
 ] as const
 
 function visibleTexts(): string[] {
