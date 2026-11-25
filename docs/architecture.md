@@ -59,7 +59,7 @@ state, not chosen by the user.
 | ORM / DB     | SQLAlchemy 2.x (typed `Mapped[...]`), PostgreSQL 16, Alembic migrations |
 | Security     | bcrypt PIN hashing, entered-code masking |
 | Observability| OpenTelemetry → Jaeger (OTLP gRPC), custom domain spans + auto Flask/SQLAlchemy instrumentation |
-| Frontend     | React 19 + TypeScript + Vite, **Ant Design 5**, TanStack Query, Zustand, React Router 7 |
+| Frontend     | React 19 + TypeScript + Vite, **Ant Design 5**, TanStack Query, Zustand, React Router 7, i18next |
 | Deployment   | Docker Compose (postgres, jaeger, backend, frontend/nginx) |
 
 ---
@@ -420,11 +420,36 @@ frontend/src/
   api/client.ts     # axios instance, baseURL = /pinpad (Vite/nginx proxy)
   api/index.ts      # typed API functions + interfaces
   stores/themeStore # zustand (persisted dark/light)
+  i18n/             # i18next setup, locale files, formatters, API error mapping
   components/common # tags (decision/event/door state), date formatting
+  components/LanguageSwitcher.tsx
   pages/            # one page per route
   App.tsx           # AntD Layout shell + router; kiosk pinpad rendered bare
   main.tsx          # ConfigProvider (theme) + QueryClient + Router
 ```
+
+### Internationalisation
+
+All user-facing text comes from `frontend/src/i18n/locales/<code>.json`
+(`en` is the default, `ro` is included). Keys are flat dotted strings
+(`nav.dashboard`); a key missing from a locale falls back to English.
+
+- **Supported languages** are listed in `frontend/src/i18n/config.ts`. Adding a
+  language means adding `locales/<code>.json` with every key from `en.json` and
+  one entry in `SUPPORTED_LOCALES`.
+- **Language choice** is resolved on load: saved choice in `localStorage`
+  (key `pinpad-locale`), then the primary subtag of `navigator.languages`, then
+  English. The switcher changes language without a reload and saves the choice.
+- **Dates and numbers** use a per-language date pattern (`dateTimeFormat`) and
+  `Intl.NumberFormat` with the language's `numberLocale`.
+- **API errors** are mapped in `i18n/errors.ts`: the frontend reads `error` or
+  `details.reason` from the response and shows translated text. Unknown codes
+  show a generic message, never the English API text. The backend is unchanged.
+- **Protocol values** (decision codes, door states) are kept as-is; only their
+  labels are translated.
+
+Tests live next to the code in `frontend/src/i18n/` and run with `make frontend-test`
+(`npm test`, Vitest + React Testing Library + jsdom).
 
 Routes:
 
