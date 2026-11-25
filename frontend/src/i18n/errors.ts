@@ -17,3 +17,11 @@ export function translateApiError(err: unknown, t: Translate): string {
   if (code && KNOWN_CODES.has(code)) return t(`errors.${code}`)
   return t('errors.unknown')
 }
+
+// Translated text for a decision reason code (e.g. INVALID_CODE_FORMAT).
+// Unknown reasons fall back to the generic error text, never the raw code.
+export function translateReason(reason: string, t: Translate): string {
+  const key = `reason.${reason}`
+  const text = t(key)
+  return text === key ? t('errors.unknown') : text
+}
