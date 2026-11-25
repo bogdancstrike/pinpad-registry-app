@@ -5,7 +5,11 @@ import { Button, Typography, theme as antTheme, Result, Space, Card, Tag, Divide
 import {
   DeleteOutlined, CheckOutlined, ArrowLeftOutlined, LogoutOutlined, HomeOutlined,
 } from '@ant-design/icons'
+import { useTranslation } from 'react-i18next'
 import { submitAccessAttempt, getPinpadHints, type AccessResult } from '@/api'
+import { LanguageSwitcher } from '@/components/LanguageSwitcher'
+import { translateError } from '@/i18n/errors'
+import i18n from '@/i18n'
 
 const { Text, Title, Paragraph } = Typography
 
@@ -13,7 +17,18 @@ const KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
 
 type Screen = 'input' | 'inside' | 'result'
 
+/** Text for a backend access result: backend messages are English, so map by decision/reason codes. */
+function resultText(res: AccessResult): { message: string; reason?: string } {
+  const reason = res.reason ? i18n.t(`reason.${res.reason}`, { defaultValue: res.reason }) : undefined
+  if (res.decision === 'DENIED') return { message: i18n.t('access.denied'), reason }
+  if (res.decision === 'GRANTED') {
+    return { message: i18n.t('access.granted', { eventType: i18n.t(`eventType.${res.eventType}`, { defaultValue: res.eventType }) }) }
+  }
+  return { message: reason ?? i18n.t('errors.generic'), reason: undefined }
+}
+
 export function PinpadPage() {
+  const { t } = useTranslation()
   const { roomCode } = useParams<{ roomCode: string }>()
   const navigate = useNavigate()
   const { token } = antTheme.useToken()
@@ -46,7 +61,7 @@ export function PinpadPage() {
       if (res.decision === 'GRANTED' && res.eventType === 'ENTER') setScreen('inside')
       else setScreen('result')
     } catch (e) {
-      setResult({ decision: 'ERROR', eventType: 'SYSTEM_ERROR', message: (e as Error).message })
+      setResult({ decision: 'ERROR', eventType: 'SYSTEM_ERROR', message: translateError(e) })
       setScreen('result')
     } finally {
       setSubmitting(false)
@@ -81,27 +96,33 @@ export function PinpadPage() {
     </div>
   )
 
+  const languageBar = (
+    <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+      <LanguageSwitcher size="small" />
+    </div>
+  )
+
   // ── In-room screen: offer to exit ────────────────────────────────────────
   if (screen === 'inside') {
     return frame(
       <Card style={{ width: 380, textAlign: 'center' }}>
+        {languageBar}
         <HomeOutlined style={{ fontSize: 48, color: token.colorSuccess }} />
         <Title level={3} style={{ marginTop: 12 }}>
-          You are in {result?.room?.name || roomCode}
+          {t('pinpad.inRoom', { room: result?.room?.name || roomCode })}
         </Title>
         <Paragraph type="secondary">
-          {result?.person?.fullName} entered the room. Do you want to exit now?
+          {t('pinpad.exitPrompt', { person: result?.person?.fullName })}
         </Paragraph>
         <Space style={{ marginTop: 8 }}>
           <Button size="large" type="primary" danger icon={<LogoutOutlined />}
                   loading={submitting} onClick={() => send(lastCode)}>
-            Yes, exit room
+            {t('pinpad.yesExit')}
           </Button>
-          <Button size="large" onClick={reset}>Stay</Button>
+          <Button size="large" onClick={reset}>{t('pinpad.stay')}</Button>
         </Space>
         <Paragraph type="secondary" style={{ marginTop: 16, marginBottom: 0, fontSize: 12 }}>
-          If you stay, you can exit later: come back to this terminal and enter
-          your code again (or tap your name under “Currently inside”).
+          {t('pinpad.stayHelp')}
         </Paragraph>
       </Card>,
     )
@@ -110,20 +131,22 @@ export function PinpadPage() {
   // ── Result screen (EXIT / DENIED / ERROR) ────────────────────────────────
   if (screen === 'result') {
     const left = result?.decision === 'GRANTED' && result?.eventType === 'EXIT'
+    const text = result ? resultText(result) : { message: '', reason: undefined }
     return frame(
       <Card style={{ width: 380 }}>
+        {languageBar}
         <Result
           status={result?.decision === 'GRANTED' ? 'success' : result?.decision === 'DENIED' ? 'error' : 'warning'}
-          title={left ? `You have left ${result?.room?.name || roomCode}`
-                : result?.decision === 'GRANTED' ? `Access granted · ${result?.eventType}`
-                : result?.decision}
+          title={left ? t('pinpad.left', { room: result?.room?.name || roomCode })
+                : result?.decision === 'GRANTED' ? t('pinpad.grantedTitle', { eventType: t(`eventType.${result?.eventType}`, { defaultValue: result?.eventType ?? '' }) })
+                : result?.decision ? t(`decision.${result.decision}`) : ''}
           subTitle={
             <>
-              <div>{result?.message}</div>
-              {result?.reason && <Text type="secondary">Reason: {result.reason}</Text>}
+              <div>{text.message}</div>
+              {text.reason && <Text type="secondary">{t('pinpad.reason', { reason: text.reason })}</Text>}
             </>
           }
-          extra={<Button type="primary" onClick={reset}>Back to keypad</Button>}
+          extra={<Button type="primary" onClick={reset}>{t('pinpad.backToKeypad')}</Button>}
         />
       </Card>,
     )
@@ -132,13 +155,14 @@ export function PinpadPage() {
   // ── Input screen (keypad + demo cheat-sheet) ─────────────────────────────
   return frame(
     <>
+      {languageBar}
       <div style={{
         width: 360, background: token.colorBgContainer, borderRadius: 16,
         border: `1px solid ${token.colorBorder}`, padding: 24, boxShadow: token.boxShadow,
       }}>
         <Space style={{ width: '100%', justifyContent: 'space-between', marginBottom: 8 }}>
-          <Button type="text" icon={<ArrowLeftOutlined />} onClick={() => navigate('/pinpad')}>Exit</Button>
-          <Text type="secondary">DOOR TERMINAL</Text>
+          <Button type="text" icon={<ArrowLeftOutlined />} onClick={() => navigate('/pinpad')}>{t('common.exit')}</Button>
+          <Text type="secondary">{t('pinpad.doorTerminal')}</Text>
         </Space>
         <Title level={3} style={{ textAlign: 'center', margin: '4px 0 16px' }}>
           {hints.data?.roomName || roomCode}
@@ -150,7 +174,7 @@ export function PinpadPage() {
           fontSize: 32, letterSpacing: 8, marginBottom: 16, fontFamily: 'monospace',
         }}>
           {code ? '•'.repeat(code.length)
-                : <Text type="secondary" style={{ fontSize: 16, letterSpacing: 0 }}>enter code</Text>}
+                : <Text type="secondary" style={{ fontSize: 16, letterSpacing: 0 }}>{t('pinpad.enterCode')}</Text>}
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
@@ -164,8 +188,8 @@ export function PinpadPage() {
       {/* Currently inside — lets a "stayed" person exit directly */}
       {(hints.data?.inside || []).length > 0 && (
         <Card size="small" style={{ width: 360 }}
-              title={<Space><HomeOutlined />Currently inside</Space>}>
-          <Text type="secondary">Tap your name to exit the room:</Text>
+              title={<Space><HomeOutlined />{t('pinpad.currentlyInside')}</Space>}>
+          <Text type="secondary">{t('pinpad.tapToExit')}</Text>
           <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
             {(hints.data?.inside || []).map((p) => (
               <Button key={p.personCode} block danger icon={<LogoutOutlined />}
@@ -174,7 +198,7 @@ export function PinpadPage() {
                       onClick={() => send(`${hints.data?.pin ?? ''}${p.personCode}`)}>
                 <Space style={{ width: '100%', justifyContent: 'space-between' }}>
                   <span>{p.fullName} <Tag>{p.personCode}</Tag></span>
-                  <span>Exit</span>
+                  <span>{t('common.exit')}</span>
                 </Space>
               </Button>
             ))}
@@ -183,17 +207,17 @@ export function PinpadPage() {
       )}
 
       {/* Demo cheat-sheet — PoC only */}
-      <Card size="small" style={{ width: 360 }} title={<Space><span>🧪</span>Demo codes (PoC)</Space>}>
+      <Card size="small" style={{ width: 360 }} title={<Space><span>🧪</span>{t('pinpad.demoTitle')}</Space>}>
         {hints.isLoading ? <Spin /> : (
           <>
             <Space>
-              <Text type="secondary">Room PIN:</Text>
+              <Text type="secondary">{t('pinpad.roomPin')}</Text>
               <Tag color="blue" style={{ fontFamily: 'monospace', fontSize: 14 }}>
                 {hints.data?.pin ?? '—'}
               </Tag>
             </Space>
             <Divider style={{ margin: '10px 0' }} />
-            <Text type="secondary">Tap a person to auto-fill their full code:</Text>
+            <Text type="secondary">{t('pinpad.tapToFill')}</Text>
             <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
               {(hints.data?.people || []).map((p) => {
                 const full = `${hints.data?.pin ?? ''}${p.personCode}`
@@ -208,7 +232,7 @@ export function PinpadPage() {
                 )
               })}
               {(hints.data?.people || []).length === 0 &&
-                <Text type="secondary">No one has permission for this room yet.</Text>}
+                <Text type="secondary">{t('pinpad.noPermission')}</Text>}
             </div>
           </>
         )}

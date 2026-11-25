@@ -1,10 +1,7 @@
 import { Tag } from 'antd'
-import dayjs from 'dayjs'
+import { useTranslation } from 'react-i18next'
 
-export function fmtDateTime(value?: string | null): string {
-  if (!value) return '—'
-  return dayjs(value).format('YYYY-MM-DD HH:mm:ss')
-}
+export { fmtDateTime } from '@/i18n/format'
 
 const DECISION_COLOR: Record<string, string> = {
   GRANTED: 'green',
@@ -13,7 +10,8 @@ const DECISION_COLOR: Record<string, string> = {
 }
 
 export function DecisionTag({ decision }: { decision: string }) {
-  return <Tag color={DECISION_COLOR[decision] || 'default'}>{decision}</Tag>
+  const { t } = useTranslation()
+  return <Tag color={DECISION_COLOR[decision] || 'default'}>{t(`decision.${decision}`, { defaultValue: decision })}</Tag>
 }
 
 const EVENT_COLOR: Record<string, string> = {
@@ -25,7 +23,8 @@ const EVENT_COLOR: Record<string, string> = {
 }
 
 export function EventTypeTag({ type }: { type: string }) {
-  return <Tag color={EVENT_COLOR[type] || 'default'}>{type}</Tag>
+  const { t } = useTranslation()
+  return <Tag color={EVENT_COLOR[type] || 'default'}>{t(`eventType.${type}`, { defaultValue: type })}</Tag>
 }
 
 const DOOR_COLOR: Record<string, string> = {
@@ -37,6 +36,7 @@ const DOOR_COLOR: Record<string, string> = {
 }
 
 export function DoorStateTag({ state, online }: { state: string; online?: boolean }) {
-  if (online === false) return <Tag color="magenta">OFFLINE</Tag>
-  return <Tag color={DOOR_COLOR[state] || 'default'}>{state}</Tag>
+  const { t } = useTranslation()
+  if (online === false) return <Tag color="magenta">{t('doorState.OFFLINE')}</Tag>
+  return <Tag color={DOOR_COLOR[state] || 'default'}>{t(`doorState.${state}`, { defaultValue: state })}</Tag>
 }

@@ -1,0 +1,219 @@
+{
+  "app": {
+    "documentTitle": "Pinpad · Registru de acces",
+    "brand": "Pinpad",
+    "subtitle": "Simulator de registru de acces în camere pe bază de PIN"
+  },
+  "nav": {
+    "dashboard": "Panou de bord",
+    "pinpad": "Tastatură PIN",
+    "people": "Persoane",
+    "rooms": "Camere",
+    "permissions": "Permisiuni",
+    "registry": "Registru",
+    "monitoring": "Monitorizare",
+    "hardware": "Simulator uşă"
+  },
+  "language": {
+    "label": "Limbă"
+  },
+  "theme": {
+    "light": "luminos",
+    "dark": "întunecat",
+    "switchTo": "Comută la modul {{mode}}"
+  },
+  "common": {
+    "saved": "Salvat",
+    "deleted": "Șters",
+    "yes": "da",
+    "no": "nu",
+    "active": "Activ",
+    "inactive": "inactiv",
+    "actions": "Acțiuni",
+    "edit": "Editează",
+    "delete": "Șterge",
+    "exit": "Ieșire",
+    "code": "Cod",
+    "name": "Nume",
+    "room": "Cameră",
+    "person": "Persoană",
+    "time": "Ora",
+    "reason": "Motiv",
+    "decision": "Decizie",
+    "state": "Stare",
+    "description": "Descriere"
+  },
+  "decision": {
+    "GRANTED": "ACORDAT",
+    "DENIED": "REFUZAT",
+    "ERROR": "EROARE"
+  },
+  "eventType": {
+    "ENTER": "INTRARE",
+    "EXIT": "IEȘIRE",
+    "DENIED": "REFUZAT",
+    "SYSTEM_ERROR": "EROARE_SISTEM",
+    "HARDWARE_EVENT": "EVENIMENT_HARDWARE"
+  },
+  "doorState": {
+    "LOCKED": "BLOCATĂ",
+    "UNLOCKED": "DEBLOCATĂ",
+    "FORCED_OPEN": "FORŢATĂ",
+    "SENSOR_ERROR": "EROARE_SENZOR",
+    "OFFLINE": "DECONECTATĂ"
+  },
+  "reason": {
+    "INVALID_CODE_FORMAT": "Formatul codului este invalid.",
+    "INVALID_CODE_LENGTH": "Codul are lungimea greșită.",
+    "ROOM_NOT_FOUND": "Camera nu a fost găsită.",
+    "PERSON_NOT_FOUND": "Persoana nu a fost găsită.",
+    "ROOM_INACTIVE": "Această cameră este inactivă.",
+    "PERSON_INACTIVE": "Această persoană este inactivă.",
+    "INVALID_ROOM_PIN": "PIN-ul camerei este greșit.",
+    "PERSON_HAS_NO_PERMISSION_FOR_ROOM": "Nu există permisiune pentru această cameră.",
+    "PERMISSION_NOT_YET_VALID": "Permisiunea nu este încă valabilă.",
+    "PERMISSION_EXPIRED": "Permisiunea a expirat.",
+    "DOOR_CONTROLLER_OFFLINE": "Controlerul uşii este deconectat.",
+    "DOOR_SENSOR_ERROR": "Eroare de senzor la uşă.",
+    "HARDWARE_ERROR": "Eroare de echipament."
+  },
+  "errors": {
+    "generic": "A apărut o eroare. Încercați din nou.",
+    "network": "Serverul nu poate fi contactat. Verificați conexiunea.",
+    "not_found": "Nu a fost găsit.",
+    "conflict": "Acest element există deja sau intră în conflict cu date existente.",
+    "validation_error": "Verificați valorile introduse.",
+    "hardware_error": "Eroare de echipament la uşă."
+  },
+  "access": {
+    "granted": "Acces acordat. {{eventType}} înregistrat.",
+    "denied": "Acces refuzat."
+  },
+  "dashboard": {
+    "title": "Panou de bord",
+    "totalRooms": "Total camere",
+    "activePeople": "Persoane active",
+    "currentlyInside": "Aflați în prezent în interior",
+    "grantedToday": "Acordate azi",
+    "deniedToday": "Refuzate azi",
+    "doorsOffline": "Uşi deconectate",
+    "since": "Din",
+    "doorStates": "Stările uşilor",
+    "recentDenied": "Încercări recente refuzate / cu eroare",
+    "nobodyInside": "Nimeni în interior",
+    "noDoors": "Nicio uşă"
+  },
+  "door": {
+    "title": "Simulator uşă",
+    "subtitle": "Acționați manual echipamentul simulat al uşii pentru a demonstra scenarii anormale.",
+    "locked": "Blocată",
+    "controller": "Controler",
+    "lastUnlock": "Ultima deblocare",
+    "yes": "da",
+    "no": "nu",
+    "online": "online",
+    "offline": "offline",
+    "actionDone": "{{action}} → {{code}}",
+    "actions": {
+      "unlock": "deblocare",
+      "lock": "blocare",
+      "force-open": "forțare deschidere",
+      "sensor-error": "eroare senzor",
+      "offline": "deconectare",
+      "online": "conectare"
+    },
+    "buttons": {
+      "unlock": "Deblochează",
+      "lock": "Blochează",
+      "force-open": "Forțează deschiderea",
+      "sensor-error": "Eroare senzor",
+      "offline": "Deconectează",
+      "online": "Conectează"
+    }
+  },
+  "monitoring": {
+    "title": "Monitorizare",
+    "subtitle": "Starea uşilor și ocupare camerelor în timp real (se actualizează la 5 secunde).",
+    "doors": "Uşi",
+    "locked": "Blocată",
+    "unlocked": "Deblocată",
+    "online": "Online",
+    "offline": "Offline",
+    "currentlyInside": "Aflați în prezent în interior",
+    "entered": "Intrat la",
+    "noDoors": "Nicio uşă",
+    "nobodyInside": "Nimeni în interior"
+  },
+  "launcher": {
+    "title": "Terminale Pinpad",
+    "subtitle": "Alegeți o cameră pentru a deschide terminalul ei de uşă.",
+    "noRooms": "Încă nu există camere"
+  },
+  "pinpad": {
+    "doorTerminal": "TERMINAL UŞĂ",
+    "enterCode": "introduceți codul",
+    "inRoom": "Sunteți în {{room}}",
+    "exitPrompt": "{{person}} a intrat în cameră. Doriți să ieşiți acum?",
+    "yesExit": "Da, ieşi din cameră",
+    "stay": "Rămân",
+    "stayHelp": "Dacă rămâneți, puteți ieşi mai târziu: reveniți la acest terminal și introduceți din nou codul (sau atingeți numele dvs. din „Aflați în prezent în interior”).",
+    "left": "Ați ieșit din {{room}}",
+    "grantedTitle": "Acces acordat · {{eventType}}",
+    "reason": "Motiv: {{reason}}",
+    "backToKeypad": "Înapoi la tastatură",
+    "currentlyInside": "Aflați în prezent în interior",
+    "tapToExit": "Atingeți numele dvs. pentru a ieși din cameră:",
+    "demoTitle": "Coduri demo (PoC)",
+    "roomPin": "PIN cameră:",
+    "tapToFill": "Atingeți o persoană pentru a completa automat codul complet:",
+    "noPermission": "Încă nu are nimeni permisiune pentru această cameră."
+  },
+  "people": {
+    "title": "Persoane",
+    "newPerson": "Persoană nouă",
+    "editPerson": "Editează persoana",
+    "deletePerson": "Ștergeți persoana?",
+    "fullName": "Nume complet",
+    "department": "Departament",
+    "role": "Rol",
+    "personCode": "Cod persoană (ex. 0023)",
+    "fullNameLabel": "Nume complet",
+    "departmentLabel": "Departament",
+    "roleLabel": "Rol"
+  },
+  "rooms": {
+    "title": "Camere",
+    "newRoom": "Cameră nouă",
+    "editRoom": "Editează camera",
+    "deleteRoom": "Ștergeți camera?",
+    "roomCode": "Cod (ex. SERVER_ROOM)",
+    "roomName": "Nume",
+    "descriptionLabel": "Descriere",
+    "newPin": "PIN nou (lăsați gol pentru a păstra)",
+    "roomPin": "PIN cameră (4 cifre)",
+    "pinDigits": "4 cifre",
+    "pinHashed": "PIN-ul este criptat (bcrypt) înainte de salvare."
+  },
+  "permissions": {
+    "title": "Permisiuni",
+    "grantAccess": "Acordă acces",
+    "person": "Persoană",
+    "room": "Cameră",
+    "validFrom": "Valabil de la",
+    "validUntil": "Valabil până la",
+    "revoke": "Revocă",
+    "revokePermission": "Revocați permisiunea?",
+    "granted": "Permisiune acordată",
+    "revoked": "Revocată"
+  },
+  "registry": {
+    "title": "Registru",
+    "roomCode": "Cod cameră",
+    "eventType": "Tip eveniment",
+    "total_one": "Total {{count}} eveniment",
+    "total_few": "Total {{count}} evenimente",
+    "total_other": "Total {{count}} de evenimente",
+    "event": "Eveniment",
+    "codeColumn": "Cod"
+  }
+}
